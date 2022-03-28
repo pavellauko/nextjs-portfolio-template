@@ -1,37 +1,42 @@
-const Navbar = () => (
-    <div className="navbar-wrapper">
-      <nav className="navbar navbar-expand-lg navbar-dark fj-mw9">
-        <a className="navbar-brand mr-3 font-weight-bold" href="#">FilipJerga</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+import { Navbar, Nav } from 'react-bootstrap'
+import Link from 'next/link'
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav">
-            <li className="nav-item mr-3">
-              <a className="nav-link" href="#">Portfolio</a>
-            </li>
-            <li className="nav-item mr-3">
-              <a className="nav-link" href="#">Courses</a>
-            </li>
-            <li className="nav-item mr-3">
-              <a className="nav-link" href="#">Cv</a>
-            </li>
-            <li className="nav-item mr-3">
-              <a className="nav-link" href="#">Ask me</a>
-            </li>
-          </ul>
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item mr-3">
-              <a className="nav-link" href="#">Sign Up</a>
-            </li>
-            <li className="nav-item mr-3">
-              <a className="nav-link btn btn-success bg-green-2 bright" href="#">Sign In</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+const AppLink = ({ children, className, href }) => (
+  <Link href={href}>
+    <a className={className}>{children}</a>
+  </Link>
+)
+
+const AppNavbar = () => (
+    <div className="navbar-wrapper">
+      <Navbar expand="lg" className="navbar-dark fj-mw9" navbarScroll>
+        <AppLink className="navbar-brand mr-3 font-weight-bold" href="/">
+          Ruff
+        </AppLink>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav className="me-auto my-2 my-lg-0">
+            <AppLink className="nav-link mr-3" href="/portfolios">
+              Portfolio
+            </AppLink>
+            <AppLink className="nav-link mr-3" href="/cv">
+              Cv
+            </AppLink>
+            <AppLink className="nav-link mr-3" href="/forum/categories">
+              Forum
+            </AppLink>
+          </Nav>
+          <Nav>
+            <AppLink className="nav-link mr-3" href="/register">
+              Sign Up
+            </AppLink>
+            <AppLink className="nav-link btn btn-success bg-green-2 bright" href="/login">
+              Sign In
+            </AppLink>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     </div>
 )
 
-export default Navbar;
+export default AppNavbar;

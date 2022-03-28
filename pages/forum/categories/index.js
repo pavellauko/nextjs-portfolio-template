@@ -1,9 +1,4 @@
-import { useRouter } from 'next/router'
-
 const Categories = () => {
-    const router = useRouter();
-    const category = router.query.category;
-
     return (
         <>
             <section className="section-title">

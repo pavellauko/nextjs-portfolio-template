@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
         <div className="portfolio-app">
             <Navbar />
             {Component.name === 'Home' && <Hero />}
-            <div class="container">
+            <div className="container">
                 <Component {...pageProps} />
             </div>
             {Component.name === 'Home' && (

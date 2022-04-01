@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router'
 import axios from "axios";
 
 const fetchPortfolioById = (id) => {
-  const query = `query Portfolio {
-    portfolio(id: "${id}") {
+  const query = `query Portfolio($id: ID) {
+    portfolio(id: $id) {
       _id,
       title,
       company,
@@ -16,17 +15,15 @@ const fetchPortfolioById = (id) => {
     }
   }`
 
+  const variables = { id }
   return axios
-    .post('http://localhost:3000/graphql', { query })
+    .post('http://localhost:3000/graphql', { query, variables })
     .then(({ data: graph }) => graph)
     .then(({ data }) => data.portfolio)
     .then((portfolio) => portfolio)
 }
 
 const PortfolioDetail = ({ portfolio }) => {
-  // const router = useRouter();
-  // const id = router.query.id;
-
   return (
     <div className="portfolio-detail">
       <div className="container">
@@ -37,7 +34,7 @@ const PortfolioDetail = ({ portfolio }) => {
           <p>
             <a className="btn btn-lg btn-success" href={portfolio.companyWebsite} role="button">
               See Company</a>
-            </p>
+          </p>
         </div>
 
         <div className="row marketing">
@@ -61,7 +58,7 @@ const PortfolioDetail = ({ portfolio }) => {
             <hr />
             <h4 className="title">Description</h4>
             <p>{portfolio.description}</p>
-            </div>
+          </div>
         </div>
       </div>
     </div>

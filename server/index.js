@@ -68,7 +68,7 @@ app.prepare().then(() => {
         }
         type Query {
             hello: String
-            portfolio: Portfolio
+            portfolio(id: ID): Portfolio
             portfolios: [Portfolio]
         }
     `);
@@ -76,8 +76,9 @@ app.prepare().then(() => {
   // the root provides a resolver for each API endpoint
   const root = {
     hello: () => 'Hello world',
-    portfolio: () => {
-      return data.portfolios[0]
+    portfolio: ({ id }) => {
+      const portfolio = data.portfolios.find((portfolio) => portfolio._id === id)
+      return portfolio
     },
     portfolios: () => {
       return data.portfolios

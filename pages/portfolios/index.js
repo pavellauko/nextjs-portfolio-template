@@ -38,10 +38,10 @@ const Portfolios = ({ portfolios }) => (
     <section className="pb-5">
       <div className="row">
         {portfolios.map((portfolio) => (
-          <div className="col-md-4">
+          <div key={portfolio._id} className="col-md-4">
             <Link href={`/portfolios/[id]`} as={`/portfolios/${portfolio._id}`}>
               <a className="cardLink">
-                <PortfolioCard key={portfolio._id} portfolio={portfolio} />
+                <PortfolioCard portfolio={portfolio} />
               </a>
             </Link>
           </div>

@@ -2,6 +2,8 @@ const express = require('express')
 const next = require('next')
 const { graphqlHTTP } = require('express-graphql')
 const { buildSchema } = require('graphql')
+const { portfolioTypes } = require('./graphql/types')
+const { portfolioResolvers } = require('./graphql/resolvers')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -12,77 +14,23 @@ const handle = app.getRequestHandler()
 // const db = require('./database')
 // db.connect();
 
-const data = {
-  portfolios: [
-    {
-      _id: "sad87da79ssss",
-      title: 'Job in Netcentric',
-      company: 'Netcentric',
-      companyWebsite: 'www.google.com',
-      location: 'Spain, Barcelona',
-      jobTitle: 'Engineer',
-      description: 'Doing something, programing....',
-      startDate: '01/01/2014',
-      endDate: '01/01/2016'
-    },
-    {
-      _id: "da789ad1",
-      title: 'Job in Siemens',
-      company: 'Siemens',
-      companyWebsite: 'www.google.com',
-      location: 'Slovakia, Kosice',
-      jobTitle: 'Software Engineer',
-      description: 'Responsoble for parsing framework for JSON medical data.',
-      startDate: '01/01/2011',
-      endDate: '01/01/2013'
-    },
-    {
-      _id: "sadcxv9",
-      title: 'Work in USA',
-      company: 'WhoKnows',
-      companyWebsite: 'www.google.com',
-      location: 'USA, Montana',
-      jobTitle: 'Housekeeping',
-      description: 'So much responsibility....Overloaaaaaad',
-      startDate: '01/01/2010',
-      endDate: '01/01/2011'
-    }
-  ]
-}
-
 app.prepare().then(() => {
   const server = express();
 
   // Construct a schema using GRAPHQL schema language
   const schema = buildSchema(`
-        type Portfolio {
-            _id: ID,
-            title: String,
-            company: String,
-            companyWebsite: String,
-            location: String,
-            jobTitle: String,
-            description: String
-            startDate: String
-            endDate: String
-        }
-        type Query {
-            hello: String
-            portfolio(id: ID): Portfolio
-            portfolios: [Portfolio]
-        }
-    `);
+    ${portfolioTypes}
+
+    type Query {
+      hello: String
+      portfolio(id: ID): Portfolio
+      portfolios: [Portfolio]
+    }
+  `);
 
   // the root provides a resolver for each API endpoint
   const root = {
-    hello: () => 'Hello world',
-    portfolio: ({ id }) => {
-      const portfolio = data.portfolios.find((portfolio) => portfolio._id === id)
-      return portfolio
-    },
-    portfolios: () => {
-      return data.portfolios
-    }
+    ...portfolioResolvers,
   }
 
   server.use('/graphql', graphqlHTTP({

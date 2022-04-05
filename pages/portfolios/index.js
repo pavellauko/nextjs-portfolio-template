@@ -82,6 +82,25 @@ const graphUpdatePortfolio = (id) => {
     .then(({ data }) => data.updatePortfolio)
 }
 
+const graphDeletePortfolio = (id) => {
+  const query = `
+    mutation DeletePortfolio {
+      deletePortfolio(id: "${id}") {
+        _id,
+        title
+        jobTitle
+        description,
+        startDate,
+        endDate
+      }
+    }`
+
+  return axios
+    .post('http://localhost:3000/graphql', { query })
+    .then(({ data: graph }) => graph)
+    .then(({ data }) => data.deletePortfolio)
+}
+
 const Portfolios = ({ data }) => {
   const [portfolios, setPortfolios] = useState(data.portfolios || [])
   const createPortfolio = async () => {
@@ -91,17 +110,16 @@ const Portfolios = ({ data }) => {
   }
 
   const updatePortfolio = async (id) => {
-    console.error(id)
-
     const updated = await graphUpdatePortfolio(id)
-    console.error(updated)
-
     const index = portfolios.findIndex((portfolio) => portfolio._id === id)
-    console.error(index)
-    // const oldPortfolio = data.portfolios[index]
     const newPortfolios = [ ...data.portfolios ]
     newPortfolios[index] = updated
     console.error(newPortfolios)
+    setPortfolios(newPortfolios)
+  }
+
+  const deletePortfolio = async (id) => {
+    const newPortfolios = await graphDeletePortfolio(id);
     setPortfolios(newPortfolios)
   }
 
@@ -126,6 +144,7 @@ const Portfolios = ({ data }) => {
                 </a>
               </Link>
               <button className="btn btn-warning" onClick={() => updatePortfolio(portfolio._id)}>Update portfolio</button>
+              <button className="btn btn-danger" onClick={() => deletePortfolio(portfolio._id)}>Delete portfolio</button>
             </div>
           )
           )}

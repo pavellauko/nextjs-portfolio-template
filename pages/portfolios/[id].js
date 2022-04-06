@@ -1,13 +1,22 @@
-import { useQuery } from "@apollo/client"
+import { useQuery, useLazyQuery } from "@apollo/client"
 import { GET_PORTFOLIO } from "@/apollo/queries"
+import { useEffect, useState } from "react"
 
 const PortfolioDetail = ({ query }) => {
-  const { loading, error, data } = useQuery(GET_PORTFOLIO, { variables: { id: query.id } })
+  const [portfolio, setPortfolio ] = useState(null)
+  const [ getPortfolio, { loading, data } ] = useLazyQuery(GET_PORTFOLIO)
 
-  if(loading) return <p>Loading...</p>
-  if(error) return <p>Error: {error.message}</p>
+  useEffect(() => {
+    getPortfolio({ variables: { id: query.id } })
+  }, [])
 
-  const portfolio = data?.portfolio || {}
+  if (data && !portfolio) {
+    setPortfolio(data.portfolio)
+  }
+
+  if(loading || !portfolio) return <p>Loading...</p>
+  // if(error) return <p>Error: {error.message}</p>
+
   return (
     <div className="portfolio-detail">
       <div className="container">

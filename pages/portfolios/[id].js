@@ -1,29 +1,13 @@
-import axios from "axios";
+import { useQuery } from "@apollo/client"
+import { GET_PORTFOLIO } from "@/apollo/queries"
 
-const fetchPortfolioById = (id) => {
-  const query = `query Portfolio($id: ID) {
-    portfolio(id: $id) {
-      _id,
-      title,
-      company,
-      companyWebsite,
-      location,
-      jobTitle,
-      description,
-      startDate,
-      endDate
-    }
-  }`
+const PortfolioDetail = ({ query }) => {
+  const { loading, error, data } = useQuery(GET_PORTFOLIO, { variables: { id: query.id } })
 
-  const variables = { id }
-  return axios
-    .post('http://localhost:3000/graphql', { query, variables })
-    .then(({ data: graph }) => graph)
-    .then(({ data }) => data.portfolio)
-    .then((portfolio) => portfolio)
-}
+  if(loading) return <p>Loading...</p>
+  if(error) return <p>Error: {error.message}</p>
 
-const PortfolioDetail = ({ portfolio }) => {
+  const portfolio = data?.portfolio || {}
   return (
     <div className="portfolio-detail">
       <div className="container">
@@ -66,8 +50,7 @@ const PortfolioDetail = ({ portfolio }) => {
 }
 
 PortfolioDetail.getInitialProps = async ({ query }) => {
-  const portfolio = await fetchPortfolioById(query.id)
-  return { portfolio }
+  return { query }
 }
 
 export default PortfolioDetail

@@ -46,7 +46,7 @@ export const DELETE_PORTFOLIO = gql`
 `
 
 export const UPDATE_PORTFOLIO = gql`
-  mutation UpdatePortfolio {
+  mutation UpdatePortfolio($id: ID) {
     updatePortfolio(id: $id, input: {
       title: "UPDATED Job in Netcentric",
       company: "UPDATED Job in Netcentric",

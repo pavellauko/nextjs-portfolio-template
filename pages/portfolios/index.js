@@ -4,31 +4,13 @@ import { getDataFromTree } from "@apollo/client/react/ssr";
 
 import { withApollo } from "@/hoc/withApollo"
 import PortfolioCard from "@/components/portfolios/PortfolioCard";
-import { GET_PORTFOLIOS, CREATE_PORTFOLIO, DELETE_PORTFOLIO, UPDATE_PORTFOLIO } from "@/apollo/queries";
+import { useGetPortfolios, useUpdatePortfolio, useDeletePortfolio, useCreatePortfolio } from "@/apollo/actions";
 
 const Portfolios = () => {
-  const { data } = useQuery(GET_PORTFOLIOS)
-  const [updatePortfolio] = useMutation(UPDATE_PORTFOLIO)
-  const [deletePortfolio] = useMutation(DELETE_PORTFOLIO, {
-    update: (cache, { data: { deletePortfolio } }) => {
-      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS })
-      const newPortfolios = portfolios.filter((portfolio) => portfolio._id !== deletePortfolio)
-      cache.writeQuery({
-        query: GET_PORTFOLIOS,
-        data: { portfolios: newPortfolios }
-      })
-    }
-  })
-
-  const [createPortfolio] = useMutation(CREATE_PORTFOLIO, {
-    update: (cache, { data: { createPortfolio } }) => {
-      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS })
-      cache.writeQuery({
-        query: GET_PORTFOLIOS,
-        data: { portfolios: portfolios.concat([createPortfolio]) }
-      })
-    }
-  })
+  const { data } = useGetPortfolios()
+  const [updatePortfolio] = useUpdatePortfolio()
+  const [deletePortfolio] = useDeletePortfolio()
+  const [createPortfolio] = useCreatePortfolio()
 
   const portfolios = data?.portfolios || []
   return (

@@ -66,6 +66,6 @@ exports.portfolioMutations = {
     const index = data.portfolios.findIndex((portfolio) => portfolio._id === id)
     delete data.portfolios[index]
     data.portfolios = [...data.portfolios].filter(Boolean)
-    return data.portfolios
+    return id
   }
 }

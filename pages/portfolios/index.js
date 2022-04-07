@@ -1,37 +1,24 @@
 import { useQuery, useMutation } from "@apollo/client";
-import axios from "axios";
 import Link from 'next/link'
 import { getDataFromTree } from "@apollo/client/react/ssr";
 
 import { withApollo } from "@/hoc/withApollo"
 import PortfolioCard from "@/components/portfolios/PortfolioCard";
-import { GET_PORTFOLIOS, CREATE_PORTFOLIO } from "@/apollo/queries";
-import { UPDATE_PORTFOLIO } from "../../apollo/queries";
-
-const graphDeletePortfolio = (id) => {
-  const query = `
-    mutation DeletePortfolio {
-      deletePortfolio(id: "${id}") {
-        _id,
-        title
-        jobTitle
-        description,
-        startDate,
-        endDate
-      }
-    }`
-
-  return axios
-    .post('http://localhost:3000/graphql', { query })
-    .then(({ data: graph }) => graph)
-    .then(({ data }) => data.deletePortfolio)
-}
+import { GET_PORTFOLIOS, CREATE_PORTFOLIO, DELETE_PORTFOLIO, UPDATE_PORTFOLIO } from "@/apollo/queries";
 
 const Portfolios = () => {
   const { data } = useQuery(GET_PORTFOLIOS)
-
   const [updatePortfolio] = useMutation(UPDATE_PORTFOLIO)
-  const portfolios = data?.portfolios || []
+  const [deletePortfolio] = useMutation(DELETE_PORTFOLIO, {
+    update: (cache, { data: { deletePortfolio } }) => {
+      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS })
+      const newPortfolios = portfolios.filter((portfolio) => portfolio._id !== deletePortfolio)
+      cache.writeQuery({
+        query: GET_PORTFOLIOS,
+        data: { portfolios: newPortfolios }
+      })
+    }
+  })
 
   const [createPortfolio] = useMutation(CREATE_PORTFOLIO, {
     update: (cache, { data: { createPortfolio } }) => {
@@ -43,13 +30,7 @@ const Portfolios = () => {
     }
   })
 
-  //
-
-  const deletePortfolio = async (id) => {
-    const newPortfolios = await graphDeletePortfolio(id);
-    // setPortfolios(newPortfolios)
-  }
-
+  const portfolios = data?.portfolios || []
   return (
     <>
       <section className="section-title">
@@ -71,7 +52,7 @@ const Portfolios = () => {
                 </a>
               </Link>
               <button className="btn btn-warning" onClick={() => updatePortfolio({ variables: { id: portfolio._id }})}>Update portfolio</button>
-              <button className="btn btn-danger" onClick={() => deletePortfolio(portfolio._id)}>Delete portfolio</button>
+              <button className="btn btn-danger" onClick={() => deletePortfolio({ variables: { id: portfolio._id }})}>Delete portfolio</button>
             </div>
           )
           )}

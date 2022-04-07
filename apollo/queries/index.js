@@ -33,15 +33,8 @@ export const GET_PORTFOLIOS = gql`
 `
 
 export const DELETE_PORTFOLIO = gql`
-  mutation DeletePortfolio {
-    deletePortfolio(id: $id) {
-      _id,
-      title
-      jobTitle
-      description,
-      startDate,
-      endDate
-    }
+  mutation DeletePortfolio($id: ID) {
+    deletePortfolio(id: $id)
   }
 `
 

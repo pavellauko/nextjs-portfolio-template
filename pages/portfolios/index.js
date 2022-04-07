@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery, useMutation, update } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import axios from "axios";
 import Link from 'next/link'
+import { getDataFromTree } from "@apollo/client/react/ssr";
 
+import { withApollo } from "@/hoc/withApollo"
 import PortfolioCard from "@/components/portfolios/PortfolioCard";
 import { GET_PORTFOLIOS, CREATE_PORTFOLIO } from "@/apollo/queries";
 
@@ -133,4 +135,4 @@ Portfolios.getInitialProps = async () => {
   return {}
 }
 
-export default Portfolios;
+export default withApollo(Portfolios, { getDataFromTree });

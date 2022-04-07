@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react"
 import { useQuery, useLazyQuery } from "@apollo/client"
 import { GET_PORTFOLIO } from "@/apollo/queries"
-import { useEffect, useState } from "react"
+import { withApollo } from "@/hoc/withApollo"
 
 const PortfolioDetail = ({ query }) => {
   const [portfolio, setPortfolio ] = useState(null)
@@ -62,4 +63,4 @@ PortfolioDetail.getInitialProps = async ({ query }) => {
   return { query }
 }
 
-export default PortfolioDetail
+export default withApollo(PortfolioDetail)

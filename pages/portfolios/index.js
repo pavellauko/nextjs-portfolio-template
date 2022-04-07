@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, update } from "@apollo/client";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -56,13 +56,26 @@ const graphDeletePortfolio = (id) => {
 const Portfolios = () => {
   const [portfolios, setPortfolios] = useState([])
   const [getPortfolios, { loading, data } ] = useLazyQuery(GET_PORTFOLIOS)
-  const [createPortfolio, { loading: createLoading, data: createData }] = useMutation(CREATE_PORTFOLIO)
+  // const onPortfolioCreated = (dataC) => {
+  //   setPortfolios([...portfolios, dataC.createPortfolio])
+  // }
+  // const [createPortfolio, { loading: createLoading, data: createData }] = useMutation(CREATE_PORTFOLIO, { onCompleted: onPortfolioCreated  })
+
+  const [createPortfolio] = useMutation(CREATE_PORTFOLIO, {
+    update: (cache, { data: { createPortfolio } }) => {
+      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS })
+      cache.writeQuery({
+        query: GET_PORTFOLIOS,
+        data: { portfolios: portfolios.concat([createPortfolio]) }
+      })
+    }
+  })
 
   useEffect(() => {
     getPortfolios()
   }, [])
 
-  if (data && portfolios?.length === 0) {
+  if (data && data.portfolios.length > 0 && (portfolios?.length === 0 || portfolios?.length !== data.portfolios.length)) {
     setPortfolios(data.portfolios)
   }
 

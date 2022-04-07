@@ -10,8 +10,8 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 // Connect to DB
-// const db = require('./database')
-// db.connect();
+const db = require('./database')
+db.connect();
 
 app.prepare().then(async () => {
   const server = express();

@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import axios from "axios";
 import Link from 'next/link'
 import { getDataFromTree } from "@apollo/client/react/ssr";
@@ -56,12 +55,8 @@ const graphDeletePortfolio = (id) => {
 }
 
 const Portfolios = () => {
-  const [portfolios, setPortfolios] = useState([])
-  const [getPortfolios, { loading, data } ] = useLazyQuery(GET_PORTFOLIOS)
-  // const onPortfolioCreated = (dataC) => {
-  //   setPortfolios([...portfolios, dataC.createPortfolio])
-  // }
-  // const [createPortfolio, { loading: createLoading, data: createData }] = useMutation(CREATE_PORTFOLIO, { onCompleted: onPortfolioCreated  })
+  const { data } = useQuery(GET_PORTFOLIOS)
+  const portfolios = data?.portfolios || []
 
   const [createPortfolio] = useMutation(CREATE_PORTFOLIO, {
     update: (cache, { data: { createPortfolio } }) => {
@@ -73,30 +68,18 @@ const Portfolios = () => {
     }
   })
 
-  useEffect(() => {
-    getPortfolios()
-  }, [])
-
-  if (data && data.portfolios.length > 0 && (portfolios?.length === 0 || portfolios?.length !== data.portfolios.length)) {
-    setPortfolios(data.portfolios)
-  }
-
-  if (loading) {
-    return <p>Loading...</p>
-  }
-
   const updatePortfolio = async (id) => {
     const updated = await graphUpdatePortfolio(id)
-    const index = portfolios.findIndex((portfolio) => portfolio._id === id)
-    const newPortfolios = [ ...data.portfolios ]
-    newPortfolios[index] = updated
-    console.error(newPortfolios)
-    setPortfolios(newPortfolios)
+    // const index = portfolios.findIndex((portfolio) => portfolio._id === id)
+    // const newPortfolios = [ ...data.portfolios ]
+    // newPortfolios[index] = updated
+    // console.error(newPortfolios)
+    // setPortfolios(newPortfolios)
   }
 
   const deletePortfolio = async (id) => {
     const newPortfolios = await graphDeletePortfolio(id);
-    setPortfolios(newPortfolios)
+    // setPortfolios(newPortfolios)
   }
 
   return (
@@ -129,10 +112,6 @@ const Portfolios = () => {
       <a href="" className="btn btn-main bg-blue ttu">See More Portfolios</a>
     </>
   )
-}
-
-Portfolios.getInitialProps = async () => {
-  return {}
 }
 
 export default withApollo(Portfolios, { getDataFromTree });

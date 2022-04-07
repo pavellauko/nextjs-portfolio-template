@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useQuery, useLazyQuery } from "@apollo/client"
 import { GET_PORTFOLIO } from "@/apollo/queries"
 import { withApollo } from "@/hoc/withApollo"
+import { getDataFromTree } from "@apollo/client/react/ssr";
 
 const PortfolioDetail = ({ query }) => {
-  const [portfolio, setPortfolio ] = useState(null)
-  const [ getPortfolio, { loading, data } ] = useLazyQuery(GET_PORTFOLIO)
+  // const [portfolio, setPortfolio ] = useState(null)
+  const { loading, data, error } = useQuery(GET_PORTFOLIO, { variables: { id: query.id } })
 
-  useEffect(() => {
-    getPortfolio({ variables: { id: query.id } })
-  }, [])
+  console.error('AAA data', data)
+  const portfolio = data?.portfolio || {}
 
-  if (data && !portfolio) {
-    setPortfolio(data.portfolio)
-  }
+  // useEffect(() => {
+  //   getPortfolio({ variables: { id: query.id } })
+  // }, [])
 
-  if(loading || !portfolio) return <p>Loading...</p>
+  // if (data && !portfolio) {
+  //   setPortfolio(data.portfolio)
+  // }
+
+  // if(loading || !portfolio) return <p>Loading...</p>
   // if(error) return <p>Error: {error.message}</p>
 
   return (
@@ -63,4 +67,4 @@ PortfolioDetail.getInitialProps = async ({ query }) => {
   return { query }
 }
 
-export default withApollo(PortfolioDetail)
+export default withApollo(PortfolioDetail, { getDataFromTree })

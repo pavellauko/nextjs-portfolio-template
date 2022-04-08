@@ -11,8 +11,8 @@ const data = {
       location: 'Spain, Barcelona',
       jobTitle: 'Engineer',
       description: 'Doing something, programing....',
-      startDate: '01/01/2014',
-      endDate: '01/01/2016'
+      startDate: '2014-01-01T23:59Z',
+      endDate: '2016-01-01T23:59Z'
     },
     {
       _id: "da789ad1",
@@ -22,8 +22,8 @@ const data = {
       location: 'Slovakia, Kosice',
       jobTitle: 'Software Engineer',
       description: 'Responsoble for parsing framework for JSON medical data.',
-      startDate: '01/01/2011',
-      endDate: '01/01/2013'
+      startDate: '2011-01-01T23:59Z',
+      endDate: '2013-01-01T23:59Z'
     },
     {
       _id: "sadcxv9",
@@ -33,8 +33,8 @@ const data = {
       location: 'USA, Montana',
       jobTitle: 'Housekeeping',
       description: 'So much responsibility....Overloaaaaaad',
-      startDate: '01/01/2010',
-      endDate: '01/01/2011'
+      startDate: '2010-01-01T23:59Z',
+      endDate: '2011-01-01T23:59Z'
     }
   ]
 }
@@ -50,23 +50,16 @@ exports.portfolioQueries = {
 
 
 exports.portfolioMutations = {
-  createPortfolio: (root, { input }) => {
-    const _id = require('crypto').randomBytes(10).toString('hex')
-    const newPortfolio = { ...input, _id}
-    data.portfolios.push(newPortfolio)
+  createPortfolio: async (root, { input }) => {
+    const newPortfolio = await Portfolio.create(input)
     return newPortfolio
   },
-  updatePortfolio: (root, { id, input }) => {
-    const index = data.portfolios.findIndex((portfolio) => portfolio._id === id)
-    const oldPortfolio = data.portfolios[index]
-    const newPortfolio = { ...oldPortfolio, ...input}
-    data.portfolios[index] = newPortfolio
-    return newPortfolio
+  updatePortfolio: async (root, { id, input }) => {
+    const updatedPortfolio = await Portfolio.findByIdAndUpdate(id, input, { new: true })
+    return updatedPortfolio
   },
-  deletePortfolio: (root, { id }) => {
-    const index = data.portfolios.findIndex((portfolio) => portfolio._id === id)
-    delete data.portfolios[index]
-    data.portfolios = [...data.portfolios].filter(Boolean)
-    return id
+  deletePortfolio: async (root, { id }) => {
+    const deleted = await Portfolio.findByIdAndRemove(id)
+    return deleted._id
   }
 }

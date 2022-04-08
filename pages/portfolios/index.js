@@ -12,6 +12,8 @@ const Portfolios = () => {
   const [deletePortfolio] = useDeletePortfolio()
   const [createPortfolio] = useCreatePortfolio()
 
+  console.error('aaa data', data)
+
   const portfolios = data?.portfolios || []
   return (
     <>

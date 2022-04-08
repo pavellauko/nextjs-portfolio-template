@@ -1,6 +1,6 @@
 const Cv = () => {
   return (
-    <h1>Cv</h1>
+    <h1>CV</h1>
   )
 }
 

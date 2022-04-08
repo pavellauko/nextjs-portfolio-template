@@ -1,9 +1,9 @@
 module.exports = {
   extends: [
-    '@bsc/eslint-config/base-react-jsx',
-    '@bsc/eslint-config/base-typescript',
-    '@bsc/eslint-config/perf-react-jsx',
-    'plugin:prettier/recommended',
+    // '@bsc/eslint-config/base-react-jsx',
+    // '@bsc/eslint-config/base-typescript',
+    // '@bsc/eslint-config/perf-react-jsx',
+    // 'plugin:prettier/recommended',
   ],
   globals: {
     JSX: false,

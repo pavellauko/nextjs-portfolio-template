@@ -1,7 +1,7 @@
 const data = {
   portfolios: [
     {
-      title: 'Job in Netcentric 2',
+      title: 'Job in Netcentric',
       company: 'Netcentric',
       companyWebsite: 'www.google.com',
       location: 'Spain, Barcelona',
@@ -11,7 +11,7 @@ const data = {
       endDate: '01/01/2016'
     },
     {
-      title: 'Job in Siemens 2',
+      title: 'Job in Siemens',
       company: 'Siemens',
       companyWebsite: 'www.google.com',
       location: 'Slovakia, Kosice',
@@ -21,7 +21,7 @@ const data = {
       endDate: '01/01/2013'
     },
     {
-      title: 'Work in USA 2',
+      title: 'Work in USA',
       company: 'WhoKnows',
       companyWebsite: 'www.google.com',
       location: 'USA, Montana',

@@ -1,4 +1,3 @@
-import { useQuery, useMutation } from "@apollo/client";
 import Link from 'next/link'
 import { getDataFromTree } from "@apollo/client/react/ssr";
 

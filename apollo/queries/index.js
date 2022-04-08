@@ -47,8 +47,8 @@ export const UPDATE_PORTFOLIO = gql`
       location: "UPDATED Job in Netcentric",
       jobTitle: "UPDATED Job in Netcentric",
       description: "UPDATED Job in Netcentric",
-      startDate: "12/12/2012",
-      endDate: "12/12/2012"
+      startDate: "2017-01-01T23:59Z",
+      endDate: "2018-01-01T23:59Z"
     }) {
       _id,
       title
@@ -69,8 +69,8 @@ export const CREATE_PORTFOLIO = gql`
       location: "Job in Netcentric",
       jobTitle: "Job in Netcentric",
       description: "Job in Netcentric",
-      startDate: "12/12/2012",
-      endDate: "12/12/2012"
+      startDate: "2016-02-23T23:59Z",
+      endDate: "2017-03-14T23:59Z"
     }) {
       _id,
       title

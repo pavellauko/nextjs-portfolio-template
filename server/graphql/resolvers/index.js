@@ -1,71 +1,23 @@
-const data = {
-  portfolios: [
-    {
-      _id: "sad87da79ssss",
-      title: 'Job in Netcentric',
-      company: 'Netcentric',
-      companyWebsite: 'www.google.com',
-      location: 'Spain, Barcelona',
-      jobTitle: 'Engineer',
-      description: 'Doing something, programing....',
-      startDate: '01/01/2014',
-      endDate: '01/01/2016'
-    },
-    {
-      _id: "da789ad1",
-      title: 'Job in Siemens',
-      company: 'Siemens',
-      companyWebsite: 'www.google.com',
-      location: 'Slovakia, Kosice',
-      jobTitle: 'Software Engineer',
-      description: 'Responsoble for parsing framework for JSON medical data.',
-      startDate: '01/01/2011',
-      endDate: '01/01/2013'
-    },
-    {
-      _id: "sadcxv9",
-      title: 'Work in USA',
-      company: 'WhoKnows',
-      companyWebsite: 'www.google.com',
-      location: 'USA, Montana',
-      jobTitle: 'Housekeeping',
-      description: 'So much responsibility....Overloaaaaaad',
-      startDate: '01/01/2010',
-      endDate: '01/01/2011'
-    }
-  ]
-}
-
 exports.portfolioQueries = {
-  hello: () => 'Hello world',
-  portfolio: (root, { id }) => {
-    const portfolio = data.portfolios.find((portfolio) => portfolio._id === id)
-    return portfolio
+  portfolio: async (root, { id }, ctx) => {
+    return await ctx.models.Portfolio.getById(id);
   },
-  portfolios: () => {
-    return data.portfolios
+  portfolios: async (root, args, ctx) => {
+    return await ctx.models.Portfolio.getAll({})
   },
 }
-
 
 exports.portfolioMutations = {
-  createPortfolio: (root, { input }) => {
-    const _id = require('crypto').randomBytes(10).toString('hex')
-    const newPortfolio = { ...input, _id}
-    data.portfolios.push(newPortfolio)
+  createPortfolio: async (root, { input }, ctx) => {
+    const newPortfolio = await ctx.models.Portfolio.create(input)
     return newPortfolio
   },
-  updatePortfolio: (root, { id, input }) => {
-    const index = data.portfolios.findIndex((portfolio) => portfolio._id === id)
-    const oldPortfolio = data.portfolios[index]
-    const newPortfolio = { ...oldPortfolio, ...input}
-    data.portfolios[index] = newPortfolio
-    return newPortfolio
+  updatePortfolio: async (root, { id, input }, ctx) => {
+    const updatedPortfolio = await ctx.models.Portfolio.findAndUpdate(id, input)
+    return updatedPortfolio
   },
-  deletePortfolio: (root, { id }) => {
-    const index = data.portfolios.findIndex((portfolio) => portfolio._id === id)
-    delete data.portfolios[index]
-    data.portfolios = [...data.portfolios].filter(Boolean)
-    return id
+  deletePortfolio: async (root, { id }, ctx) => {
+    const deleted = await ctx.models.Portfolio.findAndDelete(id)
+    return deleted._id
   }
 }

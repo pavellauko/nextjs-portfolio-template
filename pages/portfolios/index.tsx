@@ -1,10 +1,9 @@
-import { useQuery, useMutation } from "@apollo/client";
 import Link from 'next/link'
 import { getDataFromTree } from "@apollo/client/react/ssr";
 
 import { withApollo } from "@/hoc/withApollo"
-import PortfolioCard from "@/components/portfolios/PortfolioCard";
-import { useGetPortfolios, useUpdatePortfolio, useDeletePortfolio, useCreatePortfolio } from "@/apollo/actions";
+import PortfolioCard from "@/components/portfolios/PortfolioCard"
+import { useGetPortfolios, useUpdatePortfolio, useDeletePortfolio, useCreatePortfolio } from "@/apollo/actions"
 
 const Portfolios = () => {
   const { data } = useGetPortfolios()
